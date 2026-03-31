@@ -23,21 +23,15 @@ export const queryParser = (req, res, next) => {
           .json({ error: "Query string too long" });
       }
 
-      let safeQueryString;
       try {
-        safeQueryString = decodeURIComponent(queryString);
-      } catch (err) {
-        // If decoding fails, just skip custom parsing and let Express handle it
-        console.warn("[QueryParser] Decode warning:", err.message);
-        return next();
-      }
-
-      try {
-        const parsedQuery = qs.parse(safeQueryString, {
+        // Parse query string using qs with safe options
+        // Don't decode the entire string at once - let qs handle individual parameters
+        const parsedQuery = qs.parse(queryString, {
           allowPrototypes: false,
           depth: 5,
           parameterLimit: 100,
           ignoreQueryPrefix: true,
+          delimiter: /[&;]/, // Support both & and ; as delimiters
         });
 
         req.query = sanitizeQuery(parsedQuery);
