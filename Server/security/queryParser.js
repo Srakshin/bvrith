@@ -16,32 +16,41 @@ export const queryParser = (req, res, next) => {
     if (req.url.includes("?")) {
       const [path, queryString] = req.url.split("?");
 
-      if (queryString.length > 2048) {
+      // Allow reasonable query string lengths
+      if (queryString.length > 8192) {
         return res
           .status(400)
-          .json({ error: "Query string too long or malformed" });
+          .json({ error: "Query string too long" });
       }
 
       let safeQueryString;
       try {
         safeQueryString = decodeURIComponent(queryString);
-      } catch {
-        return res.status(400).json({ error: "Invalid query encoding" });
+      } catch (err) {
+        // If decoding fails, just skip custom parsing and let Express handle it
+        console.warn("[QueryParser] Decode warning:", err.message);
+        return next();
       }
 
-      const parsedQuery = qs.parse(safeQueryString, {
-        allowPrototypes: false,
-        depth: 5,
-        parameterLimit: 100,
-        ignoreQueryPrefix: true,
-      });
+      try {
+        const parsedQuery = qs.parse(safeQueryString, {
+          allowPrototypes: false,
+          depth: 5,
+          parameterLimit: 100,
+          ignoreQueryPrefix: true,
+        });
 
-      req.query = sanitizeQuery(parsedQuery);
+        req.query = sanitizeQuery(parsedQuery);
+      } catch (err) {
+        // If query parsing fails, let Express handle the default parsing
+        console.warn("[QueryParser] Parse warning:", err.message);
+      }
     }
 
     next();
   } catch (e) {
     console.error("[QueryParser Error]:", e.message);
-    res.status(400).json({ error: "Invalid query parameters" });
+    // Don't reject with 400, let Express handle it
+    next();
   }
 };
