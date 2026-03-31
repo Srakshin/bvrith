@@ -9,7 +9,7 @@ function MakeFriends() {
         />
         <img
           src="/userProfile.webp"
-          alt="Study Room"
+          alt="Study dashboard"
           className="absolute top-0 left-0 h-[90%] rounded-2xl shadow-2xl object-cover"
         />
         <img

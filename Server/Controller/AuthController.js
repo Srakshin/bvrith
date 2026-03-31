@@ -9,11 +9,9 @@ import { createUserWithUniqueUsername } from "../Middlewares/usernameHandler.js"
 import generateAuthToken from "../utils/GenerateAuthToken.js";
 import sendMail from "../utils/sendMail.js";
 
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI } =
-  process.env;
-
 // OAuth controllers
 const googleAuth = (req, res) => {
+  const { GOOGLE_CLIENT_ID, GOOGLE_REDIRECT_URI } = process.env;
   const scope =
     "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
 
@@ -29,6 +27,8 @@ const googleAuth = (req, res) => {
 };
 
 const googleCallback = async (req, res) => {
+  const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI } = process.env;
+  const FRONTEND_URL = (process.env.CORS_ORIGIN || "http://localhost:5173").split(",")[0].trim();
   const code = req.query.code;
   if (!code) return res.status(400).send("No code provided");
 
@@ -77,11 +77,11 @@ const googleCallback = async (req, res) => {
         sameSite: "lax",
       })
       .redirect(
-        `${process.env.CORS_ORIGIN}/auth/google/callback?token=${appToken}&refreshToken=${refreshToken}`
+        `${FRONTEND_URL}/auth/google/callback?token=${appToken}&refreshToken=${refreshToken}`
       );
   } catch (err) {
     console.error("Google OAuth error:", err);
-    res.redirect(`${process.env.CORS_ORIGIN}/login?error=oauth_failed`);
+    res.redirect(`${FRONTEND_URL}/login?error=oauth_failed`);
   }
 };
 

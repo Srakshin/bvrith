@@ -14,7 +14,7 @@ const SEO = ({
   const defaultTitle =
     "Studia";
   const defaultDescription =
-    "Transform your learning experience with Studia. Join study rooms, use focus timers, play educational games, and collaborate with students worldwide.";
+    "Transform your learning experience with Studia. Use focus timers, track goals, and collaborate with students worldwide.";
   const defaultImage = "https://studia.online/og-image.jpg";
   const defaultUrl = "https://studia.online";
 

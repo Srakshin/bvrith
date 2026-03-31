@@ -5,7 +5,7 @@ import { initializeSocket } from "../Socket/socket.js";
 export function createSocket(server) {
   return new Server(server, {
     cors: {
-      origin: CORS_ORIGIN,
+      origin: CORS_ORIGIN.split(",").map((o) => o.trim()),
       methods: ["GET", "POST"],
       credentials: true,
     },

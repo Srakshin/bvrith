@@ -29,31 +29,3 @@ export async function generateEmbedding(text) {
         return null;
     }
 }
-
-/**
- * Chat with the LLM.
- * @param {Array} messages - Array of message objects [{ role: 'user', content: '...' }]
- * @returns {Promise<string>} - The assistant's response content.
- */
-export async function chatResponse(messages) {
-    try {
-        const timeoutPromise = new Promise((_, reject) => {
-            setTimeout(() => reject(new Error("Ollama request timed out after 300 seconds")), 300000); // 5 min timeout
-        });
-
-        const chatPromise = ollama.chat({
-            model: 'llama3.1', // As requested by user
-            messages: messages,
-        });
-
-        const response = await Promise.race([chatPromise, timeoutPromise]);
-        return response.message.content;
-    } catch (error) {
-        console.error("Error calling Ollama chat:", error.message);
-        // Fallback or rethrow
-        if (error.message.includes("timed out")) {
-            return "I'm sorry, I'm waiting too long for a response. Please try asking a shorter question.";
-        }
-        throw error;
-    }
-}
