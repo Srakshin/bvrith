@@ -1,0 +1,219 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --bg-primary: #ffffff;
+    --bg-sec: #f7f7f7;
+    --bg-ter: #ffffff;
+    --txt: #262626;
+    --txt-dim: #5c5c5c;
+    --txt-disabled: #8c8c8c;
+    --radius: 0.375rem;
+    --btn: #ef4444;
+    --btn-hover: #dc2626;
+    --hover-red: rgba(239, 68, 68, 0.1);
+    --active-red: rgba(239, 68, 68, 0.15);
+    --txt-red: #ef4444;
+    --shadow-rgb: 0, 0, 0;
+    --border: #f0f0f0;
+    --logo-invert: 0;
+  }
+
+  .dark {
+    --bg-primary: #1a1a1a;
+    --bg-sec: #262626;
+    --bg-ter: #2b2b2b;
+    --txt: #eff1f6;
+    --txt-dim: #9ca3af;
+    --txt-disabled: #4b5563;
+    --radius: 0.375rem;
+    --btn: #ef4444;
+    --btn-hover: #dc2626;
+    --hover-red: rgba(239, 68, 68, 0.15);
+    --active-red: rgba(239, 68, 68, 0.25);
+    --txt-red: #f87171;
+    --logo-invert: 1;
+    --shadow-rgb: 0, 0, 0;
+    --border: #3c3c3c;
+  }
+
+  /* classes for ease of use */
+  .bg-primary {
+    background-color: var(--bg-primary) !important;
+  }
+  .bg-sec {
+    background-color: var(--bg-sec);
+  }
+  .bg-ter {
+    background-color: var(--bg-ter);
+  }
+  .bg-hover-red {
+    background-color: var(--hover-red) !important;
+  }
+  .txt {
+    color: var(--txt);
+  }
+  .txt-red {
+    color: var(--txt-red) !important;
+  }
+  .txt-dim {
+    color: var(--txt-dim);
+  }
+  .txt-disabled {
+    color: var(--txt-disabled) !important;
+  }
+  .btn {
+    background-color: var(--btn);
+    color: white;
+    border-radius: var(--radius);
+    &:hover {
+      background-color: var(--btn-hover);
+    }
+  }
+}
+.logo-filter {
+  filter: invert(var(--logo-invert));
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply transition-colors duration-200 font-sans;
+    @apply bg-background text-foreground;
+  }
+}
+
+.no-scrollbar {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, and Opera */
+}
+
+/* Toast Notification Styles */
+@layer components {
+  .toast-notification {
+    @apply relative overflow-hidden transform transition-all duration-300;
+    background: var(--bg-ter);
+    border-radius: 20px;
+    box-shadow:
+      0 8px 25px rgba(0, 0, 0, 0.3),
+      0 4px 12px rgba(0, 0, 0, 0.15);
+    min-width: 350px;
+    max-width: 400px;
+  }
+
+  .toast-hidden {
+    @apply translate-x-full opacity-0 scale-95;
+  }
+
+  .toast-visible {
+    @apply translate-x-0 opacity-100 scale-100;
+    animation-timing-function: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  }
+
+  .toast-exiting {
+    @apply translate-x-full opacity-0 scale-90;
+    animation-timing-function: ease-out;
+  }
+
+  /* Toast Animation Keyframes */
+  @keyframes bounceInRight {
+    0% {
+      transform: translateX(100%) scale(0.95);
+      opacity: 0;
+    }
+    60% {
+      transform: translateX(-10px) scale(1.02);
+      opacity: 0.8;
+    }
+    80% {
+      transform: translateX(5px) scale(0.98);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes bounceOutRight {
+    0% {
+      transform: translateX(0) scale(1);
+      opacity: 1;
+    }
+    20% {
+      transform: translateX(-10px) scale(1.02);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translateX(100%) scale(0.9);
+      opacity: 0;
+    }
+  }
+}
+
+/* code below is only and only for tic-tac-toe. nothing else. ------------------------------------------------------*/
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--bg-primary);
+  color: var(--txt);
+}
+
+.board-cell {
+  @apply w-24 h-24 border-2 flex items-center justify-center text-4xl font-bold cursor-pointer transition-all duration-200 bg-sec;
+  border-color: var(--border);
+}
+
+.board-cell:hover {
+  background-color: var(--bg-ter);
+}
+
+.winning-cell {
+  background-color: var(--btn);
+  color: var(--bg-primary);
+}
+
+/* ------------------------------------------------------------------------------------------------------------------ */
+/* scrollbar styling */
+
+@layer utilities {
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(148, 148, 148, 0.4);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(155, 154, 154, 0.6);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: transparent;
+  }
+}
+
+/* Calendar Event title background */
+@layer components {
+  .popup-overlay {
+    @apply bg-black/50 backdrop-blur-sm;
+  }
+}

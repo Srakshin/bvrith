@@ -1,0 +1,36 @@
+name: PR Validation
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize]
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate PR description
+        run: |
+          # Safely capture PR body
+          BODY=$(cat << 'EOF'
+          ${{ github.event.pull_request.body }}
+          EOF
+          )
+
+          echo "Checking PR body..."
+
+          # Trim whitespace
+          TRIMMED=$(echo "$BODY" | xargs)
+
+          # Rule 1: Must not be empty
+          if [ -z "$TRIMMED" ]; then
+            echo "PR description cannot be empty."
+            exit 1
+          fi
+
+          # Rule 2: Must reference an issue OR be at least 10 chars long
+          if ! echo "$TRIMMED" | grep -qE "(Fixes|Closes|Resolves) #[0-9]+" && [ ${#TRIMMED} -lt 10 ]; then
+            echo " PR must either reference an issue (e.g., Fixes #123) OR provide a meaningful description."
+            exit 1
+          fi
+
+          echo "PR description is valid."

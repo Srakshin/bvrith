@@ -1,0 +1,43 @@
+name: Prettier Check
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  prettier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js for Client
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Client dependencies
+        run: |
+          cd Client
+          npm ci
+
+      - name: Run Prettier Check on Client
+        run: |
+          cd Client
+          npx prettier --config ../.prettierrc.json --check .
+
+      - name: Setup Node.js for Server
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: Server/package-lock.json
+
+      - name: Install Server dependencies
+        run: |
+          cd Server
+          npm ci
+
+      - name: Run Prettier Check on Server
+        run: |
+          cd Server
+          npx prettier --config ../.prettierrc.json --check .

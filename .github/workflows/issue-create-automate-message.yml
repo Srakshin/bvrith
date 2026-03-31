@@ -1,0 +1,59 @@
+name: Auto Comment on Issue
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Add to Issue
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { context, core } = require("@actions/github-script");
+
+            const { owner, repo } = context.repo;
+            const issueNumber = context.issue.number;
+            const opener = context.payload.issue.user.login;
+
+            // Find the opener's permission level on this repo
+            let perm = "none";
+
+            try {
+              const res = await github.rest.repos.getCollaboratorPermissionLevel({
+                owner,
+                repo,
+                username: opener,
+              });
+              perm = res.data.permission; // admin | maintain | write | triage | read
+            } catch (e) {
+              perm = "none";
+            }
+
+            // Skip for admins/collaborators
+            if (["admin", "maintain", "write", "triage"].includes(perm)) {
+              core.info(`No auto-comment: ${opener} has ${perm} permission.`);
+              return;
+            }
+
+            const commentBody = `
+### Thank you for raising this issue!  
+We'll review it as soon as possible. We truly appreciate your contributions!  
+
+> Meanwhile, make sure you've visited the **README.md**, **CONTRIBUTING.md**, and **CODE_OF_CONDUCT.md** before creating a PR for this.  
+Please do **NOT** create a PR until this issue has been assigned to you.`;
+
+            await github.rest.issues.createComment({
+              owner,
+              repo,
+              issue_number: issueNumber,
+              body: commentBody,
+            });
+
+            core.info(`Auto-comment added for outside contributor: ${opener} (permission=${perm}).`);
