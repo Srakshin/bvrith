@@ -54,47 +54,27 @@ const Friends = () => {
     <div className="max-w-4xl mx-auto">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-semibold txt">Friends List</h1>
-        <div className="flex items-center gap-3">
-          <div className="relative">
-            <Search
-              className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2"
-              style={{ color: "var(--txt-dim)" }}
-            />
-            <input
-              type="text"
-              placeholder="Search friends"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="txt px-4 py-2 pl-10 w-96 bg-transparent"
-              style={{
-                color: "var(--txt)",
-                background: "transparent",
-                border: "none",
-                borderBottom: "1.5px solid var(--btn)",
-                borderRadius: 0,
-                outline: "none",
-                transition: "border-color 0.15s, box-shadow 0.15s",
-              }}
-            />
-          </div>
-          <Link
-            to={"/session"}
-            className="txt px-4 py-2 font-semibold no-underline cursor-pointer"
+        <div className="relative">
+          <Search
+            className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2"
+            style={{ color: "var(--txt-dim)" }}
+          />
+          <input
+            type="text"
+            placeholder="Search friends"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="txt px-4 py-2 pl-10 w-96 bg-transparent"
             style={{
-              background: "var(--btn)",
-              color: "#fff",
-              borderRadius: "var(--radius)",
-              border: "2px solid var(--btn)",
-              boxShadow: "0 2px 8px 0 rgba(var(--shadow-rgb),0.15)",
-              transition: "background 0.2s, box-shadow 0.2s, border-color 0.2s",
-              textDecoration: "none",
-              display: "inline-block",
+              color: "var(--txt)",
+              background: "transparent",
+              border: "none",
+              borderBottom: "1.5px solid var(--btn)",
+              borderRadius: 0,
+              outline: "none",
+              transition: "border-color 0.15s, box-shadow 0.15s",
             }}
-            onMouseOver={e => e.currentTarget.style.background = "var(--btn-hover)"}
-            onMouseOut={e => e.currentTarget.style.background = "var(--btn)"}
-          >
-            Find friends
-          </Link>
+          />
         </div>
       </div>
 

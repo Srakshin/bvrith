@@ -1,9 +1,7 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Note from "../Model/NoteModel.js";
 import Task from "../Model/ToDoModel.js";
 import Event from "../Model/EventModel.js";
-import SessionRoom from "../Model/SessionModel.js";
 import User from "../Model/UserModel.js";
 import { generateEmbedding } from "../utils/ollamaUtils.js";
 import { fileURLToPath } from 'url';
@@ -30,25 +28,7 @@ async function backfillEmbeddings() {
     await connectDB();
     console.log("Starting Ollama backfill...");
 
-    // 1. Notes
-    const notes = await Note.find({ embedding: { $exists: false } });
-    console.log(`Found ${notes.length} notes without embeddings.`);
-    for (const note of notes) {
-        try {
-            if (note.title || note.content) {
-                const text = `${note.title || ""} ${note.content || ""}`;
-                const embedding = await generateEmbedding(text);
-                if (embedding) {
-                    await Note.updateOne({ _id: note._id }, { embedding });
-                    console.log(`Generated embedding for Note: ${note._id}`);
-                }
-            }
-        } catch (err) {
-            console.error(`Error processing Note ${note._id}:`, err.message);
-        }
-    }
-
-    // 2. Tasks
+    // 1. Tasks
     const tasks = await Task.find({
         $or: [
             { embedding: { $exists: false } },
@@ -71,7 +51,7 @@ async function backfillEmbeddings() {
         }
     }
 
-    // 3. Events
+    // 2. Events
     const events = await Event.find({ embedding: { $exists: false } });
     console.log(`Found ${events.length} events without embeddings.`);
     for (const event of events) {
@@ -88,29 +68,7 @@ async function backfillEmbeddings() {
         }
     }
 
-    // 4. Session Rooms
-    try {
-        const rooms = await SessionRoom.find({ embedding: { $exists: false } });
-        console.log(`Found ${rooms.length} rooms without embeddings.`);
-        for (const room of rooms) {
-            try {
-                if (room.name) {
-                    const text = `${room.name} ${room.description || ""} ${room.cateogery || ""}`;
-                    const embedding = await generateEmbedding(text);
-                    if (embedding) {
-                        await SessionRoom.updateOne({ _id: room._id }, { embedding });
-                        console.log(`Generated embedding for Room: ${room._id}`);
-                    }
-                }
-            } catch (err) {
-                console.error(`Error processing Room ${room._id}:`, err.message);
-            }
-        }
-    } catch (roomErr) {
-        console.error("Error fetching rooms:", roomErr);
-    }
-
-    // 5. Users
+    // 3. Users
     try {
         const users = await User.find({ embedding: { $exists: false } });
         console.log(`Found ${users.length} users without embeddings.`);

@@ -11,6 +11,24 @@ export function applyCommonMiddleware(app) {
   if (NODE_ENV === "development") {
     app.use(morgan("dev"));
   }
+  
+  // Configure Express query parser with safe defaults
+  app.set("query parser", (str) => {
+    // Use Express's built-in query parser with standard URL encoding
+    const qs = new URLSearchParams(str);
+    const result = {};
+    for (const [key, value] of qs) {
+      if (result[key] === undefined) {
+        result[key] = value;
+      } else if (Array.isArray(result[key])) {
+        result[key].push(value);
+      } else {
+        result[key] = [result[key], value];
+      }
+    }
+    return result;
+  });
+  
   // body parsing with limits to avoid huge payloads
   app.use(express.json({ limit: "1mb" }));
   app.use(express.urlencoded({ extended: true, limit: "1mb" }));

@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Note from "../Model/NoteModel.js";
 import Task from "../Model/ToDoModel.js";
 import Event from "../Model/EventModel.js";
+import User from "../Model/UserModel.js";
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
 
@@ -31,9 +31,9 @@ async function verify() {
             console.log("-".repeat(30));
         };
 
-        await check(Note, "Reference Note");
         await check(Task, "Task");
         await check(Event, "Event");
+        await check(User, "User");
 
     } catch (err) {
         console.error(err);

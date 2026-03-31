@@ -14,17 +14,9 @@ const Signout = () => {
       try {
         await axiosInstance.post(`/auth/logout`, {}, { withCredentials: true });
 
-        // Clear all user-related data
-        const userId = localStorage.getItem("user_id");
         localStorage.removeItem("token");
         localStorage.removeItem("activationToken");
-        localStorage.removeItem("user_id");
-        
-        // Clear user-specific AI chat data
-        if (userId) {
-          localStorage.removeItem(`studia_chat_${userId}`);
-        }
-        
+
         clearUser();
         navigate("/", { replace: true });
       } catch (error) {

@@ -33,12 +33,6 @@ const UserSchema = new mongoose.Schema(
     kudosGiven: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     kudosReceived: { type: Number, default: 0 },
     totalStudyHours: { type: Number, default: 0 }, // Added missing field
-    notes: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Note",
-      },
-    ],
     tasks: [
       {
         type: mongoose.Schema.Types.ObjectId,
@@ -50,12 +44,6 @@ const UserSchema = new mongoose.Schema(
       max: { type: Number, default: 0 },
       lastStudyDate: { type: Date },
     },
-    SessionRooms: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "SessionRoom",
-      },
-    ],
     badges: [
       {
         id: { type: String, required: true },

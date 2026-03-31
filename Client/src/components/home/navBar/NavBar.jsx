@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
-import { LayoutDashboard, Radio, MessageCircle, StickyNote, Users, Settings, LogIn } from "lucide-react";
+import { LayoutDashboard, Users, Settings, LogIn } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
-import AiChatbot from "./AiChatbot";
 import OnlineUsers from "./OnlineUsers.jsx";
 import Calculator from "./Calculator.jsx";
 import { useUserStore } from "@/stores/userStore.js";
@@ -11,7 +10,6 @@ import { useToast } from "@/contexts/ToastContext";
 function NavBar() {
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [, setSelectedId] = useState(""); // for AI, do not remove
   const { user, isBasicInfoComplete, isEduSkillsComplete } = useUserStore();
   const location = useLocation();
 
@@ -27,16 +25,13 @@ function NavBar() {
     if (!isLoggedIn) {
       e.preventDefault();
       toast.info(
-        "You are not logged in. To access your profile, make friends, join session rooms, view your stats, and more, please log in to your account."
+        "You are not logged in. Please log in to access your dashboard, friends, and settings."
       );
     }
   };
 
   const navLinks = [
     { to: "/dashboard", label: "Dashboard", Icon: LayoutDashboard },
-    { to: "/session", label: "Session", Icon: Radio },
-    { to: "/chat", label: "Chat", Icon: MessageCircle },
-    { to: "/notes", label: "Notes", Icon: StickyNote },
     { to: "/friends", label: "Friends", Icon: Users, hasNotification: true },
   ];
 
@@ -78,7 +73,6 @@ function NavBar() {
           {isLoggedIn && (
             <>
               <OnlineUsers />
-              <AiChatbot onShowId={setSelectedId} />
               <Calculator />
             </>
           )}

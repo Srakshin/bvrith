@@ -6,8 +6,8 @@ function NotLogedInPage() {
           You are not logged-in.
         </h1>
         <p className="mb-4 text-md text-[var(--txt-dim)] -mt-2 text-center opacity-80">
-          To access your profile, make friends, join session rooms, view your
-          stats and more, please log in to your account.
+          To access your profile, connect with friends, view your stats, and
+          manage your account, please log in to your account.
         </p>
         <button
           onClick={() => (window.location.href = "/auth/login")}

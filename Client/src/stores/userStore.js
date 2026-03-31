@@ -6,15 +6,9 @@ export const useUserStore = create((set, get) => ({
 
   setUser: (user) => {
     console.log("user is: ",user);
-    // Save user ID to localStorage for AI chat isolation
-    if (user && user._id) {
-      localStorage.setItem("user_id", user._id);
-    }
     set({ user })},
 
   clearUser: () => {
-    // Clear user ID from localStorage when user logs out
-    localStorage.removeItem("user_id");
     set({ user: null })
   },
 
@@ -55,7 +49,6 @@ export const useUserStore = create((set, get) => ({
   },
 }));
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const fetchUserStats = async (userId) => {
   try {
     const response = await axiosInstance.get(`/friends/${userId}/stats`);

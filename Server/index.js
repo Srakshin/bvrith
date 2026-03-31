@@ -6,7 +6,6 @@ import { applyCommonMiddleware } from "./Middlewares/commonMiddleware.js";
 import { ConnectDB } from "./Database/Db.js";
 import { mountRoutes } from "./Routes/Routes.js";
 import { mountHealthRoutes } from "./Routes/HealthRoutes.js";
-import ChatRoutes from "./Routes/ChatRoutes.js"; // Import ChatRoutes
 import { applySecurity } from "./security/securityMiddleware.js";
 import { createSocket, initSocketHandlers } from "./Config/socketConfig.js";
 import notFound from "./Middlewares/notFound.js";
@@ -52,7 +51,6 @@ app.use(morganMiddleware);
 // Routes
 mountHealthRoutes(app);
 mountRoutes(app);
-app.use("/api/chat", ChatRoutes); // Mount ChatRoutes
 
 // 404 + error middleware
 app.use(notFound);

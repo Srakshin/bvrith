@@ -5,8 +5,6 @@ import Home from "./pages/Home.jsx";
 import Dashboard from "./pages/Dashboard"; // Updated import name
 import Signout from "./Auth/Signout";
 import PageNotFound from "../src/pages/PageNotFound";
-import Session from "./pages/Sessions.jsx";
-import StudyRoom from "./pages/SessionRoom";
 import OtpInput from "./Auth/Verifyotp.jsx";
 import Settings from "./pages/Settings";
 import GoogleRedirect from "./Auth/GoogleRedirect";
@@ -16,14 +14,11 @@ import { SocketProvider } from "./contexts/SocketContext";
 import FriendsPage from "./pages/FriendsPage.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Notes from "./pages/Notes";
 import Delete from "./Auth/DeleteAccount";
-import Chats from "./pages/Chats";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import AuthLayout from "./components/AuthLayout";
 import Login from "./Auth/Login";
 import SignUp from "./Auth/SignUp";
-import SharedNotePage from "./pages/SharedNotePage";
 import { ToastProvider } from "./contexts/ToastContext";
 import UserInitializer from "./contexts/userInitializer"
 
@@ -39,7 +34,6 @@ function App() {
               <Routes>
                 <Route path="/" element={<Layout />}>
                   <Route index element={<Home />} />
-                  <Route path="session" element={<Session />} />
                   <Route
                     path="dashboard"
                     element={<Dashboard isCurrentUser={true} />}
@@ -48,11 +42,8 @@ function App() {
                     path="user/:userId"
                     element={<Dashboard isCurrentUser={false} />}
                   />
-                  <Route path="notes" element={<Notes />} />
-                  <Route path="notes/:noteId" element={<Notes />} />
                   <Route path="settings/" element={<Settings />} />
                   <Route path="friends" element={<FriendsPage />} />
-                  <Route path="chat" element={<Chats />} />
                   <Route path="*" element={<PageNotFound />} />
                 </Route>
 
@@ -72,11 +63,6 @@ function App() {
                 />
 
                 <Route path="/signout" element={<Signout />} />
-                <Route path="session/:id" element={<StudyRoom />} />
-                <Route
-                  path="/note/shared/:shareToken"
-                  element={<SharedNotePage />}
-                />
                 <Route path="*" element={<PageNotFound />} />
               </Routes>
             </RouterSelector>

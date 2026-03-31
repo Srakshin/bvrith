@@ -87,27 +87,6 @@ export const updateEventValidationRules = () => [
     .withMessage("Time must be in HH:mm format"),
 ];
 
-//-------------------------------Note---------------------------
-
-export const createNoteValidationRules = () => [
-  body("title")
-    .trim()
-    .notEmpty()
-    .withMessage("Title is required")
-    .isLength({ max: 100 })
-    .withMessage("Title cannot exceed 100 characters"),
-  body("content").trim().notEmpty().withMessage("Content is required"),
-];
-
-export const updateNoteValidationRules = () => [
-  body("title")
-    .optional()
-    .trim()
-    .isLength({ max: 100 })
-    .withMessage("Title cannot exceed 100 characters"),
-  body("content").optional().trim(),
-];
-
 // --------------------------StudySession----------------------
 
 export const createStudySessionValidationRules = () => [

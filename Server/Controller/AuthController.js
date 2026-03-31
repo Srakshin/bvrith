@@ -1,8 +1,6 @@
 import argon2 from "argon2";
 import jwt from "jsonwebtoken";
 import Event from "../Model/EventModel.js";
-import Note from "../Model/NoteModel.js";
-import SessionRoom from "../Model/SessionModel.js";
 import TimerSession from "../Model/StudySessionModel.js";
 import Task from "../Model/TodoModel.js";
 import User from "../Model/UserModel.js";
@@ -536,16 +534,9 @@ const deleteAccount = async (req, res) => {
       { $pull: { kudosGiven: userId } }
     );
 
-    await Note.updateMany(
-      { "collaborators.user": userId },
-      { $pull: { collaborators: { user: userId } } }
-    );
-
     await Promise.all([
-      Note.deleteMany({ owner: userId }),
       Event.deleteMany({ createdBy: userId }),
       TimerSession.deleteMany({ user: userId }),
-      SessionRoom.deleteMany({ createdBy: userId }),
       Task.deleteMany({ user: userId }),
     ]);
 

@@ -1,5 +1,5 @@
 import axiosInstance from "@/utils/axios";
-import { MessageCircle, ThumbsUp, UserMinus, UserPlus } from "lucide-react";
+import { ThumbsUp, UserMinus, UserPlus } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -300,14 +300,6 @@ const ProfileCard = ({ isCurrentUser = false }) => {
             >
               <ThumbsUp className="w-5 h-5" />
               <span>{hasGivenKudos ? "Kudos Given" : "Kudos"}</span>
-            </Button>
-
-            <Button
-              variant="default"
-              className="px-6 py-2 h-10 rounded-lg flex items-center space-x-2 flex-1 bg-hover-red hover:bg-active-red text-txt-red"
-            >
-              <MessageCircle className="w-5 h-5" />
-              <span>Chat</span>
             </Button>
 
             <Button

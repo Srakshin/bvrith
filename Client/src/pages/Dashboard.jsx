@@ -7,16 +7,12 @@ import Badges from "../components/dashboard/Badges";
 import StudyStats from "../components/dashboard/StudyStats";
 import Goals from "../components/dashboard/Goals";
 import Leaderboard from "../components/dashboard/Leaderboard";
-import axiosInstance from "@/utils/axios";
-import UserRoomsCard from "@/components/session/UserRoomsCard.jsx";
 import { useUserStore, fetchUserStats } from "@/stores/userStore";
 
 const Dashboard = ({ isCurrentUser = false }) => {
   const { userId } = useParams();
   const { user: currentUser } = useUserStore();
   const [userStats, setUserStats] = useState(null);
-  const [myRooms, setMyRooms] = useState([]);
-  const [userRooms, setUserRooms] = useState([]);
   // const [loading, setLoading] = useState(true);
   const [fetched, setFetched] = useState(false);
 
@@ -25,9 +21,6 @@ const Dashboard = ({ isCurrentUser = false }) => {
       try {
         if(isCurrentUser){
           if(!currentUser)return;
-          const { data } = await axiosInstance.get("/session-room");
-          setMyRooms(data.myRooms);
-
           setUserStats({
             name: `${currentUser?.FirstName ?? ""} ${currentUser?.LastName ?? ""}`.trim(),
             bio: currentUser?.Bio ?? "",
@@ -48,13 +41,6 @@ const Dashboard = ({ isCurrentUser = false }) => {
         } else if (userId) {
           const res = await fetchUserStats(userId);
 
-          const { data } = await axiosInstance.get("/session-room");
-
-          const filteredRooms = data.otherRooms?.filter(
-            (room) => room.createdBy === userId
-          ) || [];
-          setUserRooms(filteredRooms);
-
           setUserStats({
             name: `${res.userInfo?.firstName ?? ""} ${res.userInfo?.lastName ?? ""}`.trim(),
             bio: res.userInfo?.bio ?? "",
@@ -62,9 +48,9 @@ const Dashboard = ({ isCurrentUser = false }) => {
             studyStats: {
               totalSessions: res.stats?.totalSessions ?? 0,
               totalHours: res.stats?.totalHours ?? 0,
-              currentStreak: res.stats?.streaks?.current ?? 0,
-              maxStreak: res.stats?.streaks?.max ?? 0,
-              lastActive: res.stats?.streaks?.lastStudyDate ?? null,
+              currentStreak: res.stats?.streaks?.current ?? res.stats?.streak ?? 0,
+              maxStreak: res.stats?.streaks?.max ?? res.stats?.streak ?? 0,
+              lastActive: res.stats?.streaks?.lastStudyDate ?? res.stats?.lastActive ?? null,
             },
             monthlyLevel: res.stats?.monthlyLevel ?? {},
             badges: res.stats?.badges ?? [],
@@ -110,12 +96,6 @@ const Dashboard = ({ isCurrentUser = false }) => {
       <div className="flex flex-col lg:flex-row gap-3 2xl:gap-6 w-full content-center">
         <div className="lg:w-[20%] min-w-72 space-y-3 2xl:space-y-6">
           <ProfileCard isCurrentUser={isCurrentUser} user={userStats} />
-          {(isCurrentUser ? myRooms : userRooms)?.length > 0 && (
-            <UserRoomsCard
-              isCurrentUser={isCurrentUser}
-              myRooms={isCurrentUser ? myRooms : userRooms}
-            />
-          )}
         </div>
 
         <div className="flex-1">
